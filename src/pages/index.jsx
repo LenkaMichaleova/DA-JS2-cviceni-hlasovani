@@ -2,12 +2,11 @@ import { render } from '@czechitas/render';
 import '../global.css';
 import './index.css';
 
-const handleHlasuj = async () => {
+const handleHlasuj = async (input) => {
   const pollId = 1
   const data = {
     option: 2,
-    name: "Knedlenka"
-
+    name: input
   }
   const resp = await fetch(`https://hlasovani.czechitas.dev/api/poll/${pollId}`, {
     method: "POST",
@@ -23,8 +22,18 @@ const handleHlasuj = async () => {
 
 document.querySelector('#root').innerHTML = render(
   <div className="container">
-    <button id='btn' className='btn'>Hlasovat</button>
+    <form className='form'>
+      <label>Zadej jméno: 
+        <input id='inp' type="text" />
+      </label>
+      
+      <button id='btn' type='submit'>Hlasovat</button>
+    </form>
   </div>
 );
 
-document.querySelector("#btn").addEventListener("click", handleHlasuj())
+document.querySelector(".form").addEventListener("submit", (e) => {
+  e.preventDefault()
+
+  handleHlasuj(document.querySelector("#inp").value)
+})
